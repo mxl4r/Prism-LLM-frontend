@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { ModelType, ModelProvider, AIModelConfig } from '@/types';
+import { ModelType, ModelProvider, AIModelConfig } from '../../types';
 import { ChevronDown, Sparkles, Zap, Brain, Hexagon } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { Button } from '../ui/Button';
+import { Card } from '../ui/Card';
 
 interface ModelSelectorProps {
   currentModel: ModelType;

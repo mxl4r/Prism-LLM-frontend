@@ -1,5 +1,5 @@
 import { GoogleGenAI, Chat } from "@google/genai";
-import { ModelType } from "@/types";
+import { ModelType } from "../types";
 
 const getApiKey = () => {
   const key = process.env.NEXT_PUBLIC_API_KEY || process.env.API_KEY;
@@ -15,7 +15,7 @@ export class GeminiService {
   private chat: Chat | null = null;
   private model: ModelType;
 
-  constructor(model: ModelType = 'gemini-3-flash-preview') {
+  constructor(model: ModelType = 'gemini-2.5-flash-latest') {
     this.model = model;
     this.ai = new GoogleGenAI({ apiKey: getApiKey() });
   }

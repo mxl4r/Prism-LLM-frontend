@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
 import { Plus, MessageSquare, Settings, LogOut, X } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { ChatSession } from '@/types';
-import { supabase } from '@/lib/supabase/client';
+import { Button } from '../ui/Button';
+import { ChatSession } from '../../types';
+import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
 interface SidebarProps {

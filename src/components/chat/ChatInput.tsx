@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { SendHorizontal, Paperclip, Mic, X, Image as ImageIcon } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { fileToBase64 } from '@/lib/utils';
-import { Attachment } from '@/types';
+import { Button } from '../ui/Button';
+import { fileToBase64 } from '../../lib/utils';
+import { Attachment } from '../../types';
 
 interface ChatInputProps {
   onSend: (message: string, attachments: Attachment[]) => void;

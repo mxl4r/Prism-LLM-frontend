@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Sparkles, Zap, Shield, Check, Brain, Globe, Code, PenTool, BarChart } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { Sparkles, Zap, Shield, Check, Brain, Globe, Code, PenTool, BarChart, ArrowRight } from 'lucide-react';
+import { Button } from '../components/ui/Button';
+import { Card } from '../components/ui/Card';
 
 export default function LandingPage() {
   const router = useRouter();

@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { ModelType, Attachment } from "@/types";
+import { ModelType, Attachment } from "../types";
 
 // --- API Keys ---
 const KEYS = {

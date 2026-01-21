@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { supabase } from '@/lib/supabase/client';
-import { Card } from '@/components/ui/Card';
+import { supabase } from '../../../lib/supabase/client';
+import { Card } from '../../../components/ui/Card';
 import { Sparkles, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '../../../components/ui/Button';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {

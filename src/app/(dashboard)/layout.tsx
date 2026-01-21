@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Sidebar } from '@/components/layout/Sidebar';
-import { Navbar } from '@/components/layout/Navbar';
-import { ChatSession, ModelType } from '@/types';
-import { generateId } from '@/lib/utils';
-import { supabase } from '@/lib/supabase/client';
+import { Sidebar } from '../../components/layout/Sidebar';
+import { Navbar } from '../../components/layout/Navbar';
+import { ChatSession, ModelType } from '../../types';
+import { generateId } from '../../lib/utils';
+import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
 export default function DashboardLayout({

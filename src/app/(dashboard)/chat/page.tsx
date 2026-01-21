@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useCallback, useRef } from 'react';
-import { ChatWindow } from '@/components/chat/ChatWindow';
-import { ChatInput } from '@/components/chat/ChatInput';
-import { Message, Attachment, ModelType } from '@/types';
-import { AIService } from '@/lib/ai-service';
-import { generateId } from '@/lib/utils';
+import { ChatWindow } from '../../../components/chat/ChatWindow';
+import { ChatInput } from '../../../components/chat/ChatInput';
+import { Message, Attachment, ModelType } from '../../../types';
+import { AIService } from '../../../lib/ai-service';
+import { generateId } from '../../../lib/utils';
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);

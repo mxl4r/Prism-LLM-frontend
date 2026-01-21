@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useRef } from 'react';
-import { Message } from '@/types';
+import { Message } from '../../types';
 import { MessageBubble } from './MessageBubble';
 import { Sparkles } from 'lucide-react';
 

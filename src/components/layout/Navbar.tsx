@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect } from 'react';
 import { Menu, Plus, LayoutGrid } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
-import { ModelSelector } from '@/components/chat/ModelSelector';
-import { ModelType } from '@/types';
+import { Button } from '../ui/Button';
+import { ModelSelector } from '../chat/ModelSelector';
+import { ModelType } from '../../types';
 
 interface NavbarProps {
   onToggleSidebar: () => void;
