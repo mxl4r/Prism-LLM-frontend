@@ -20,8 +20,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar, currentModel, o
   }, [currentModel]);
 
   return (
-    // Added background classes for mobile visibility: bg-white/80 backdrop-blur-md border-b border-white/50
-    // Removed these on medium screens: md:bg-transparent md:border-none md:backdrop-blur-none
     <header className="h-16 flex items-center justify-between px-4 z-10 bg-white/80 backdrop-blur-md border-b border-white/50 md:bg-transparent md:border-none md:backdrop-blur-none transition-all">
       <div className="flex items-center gap-3">
         <Button variant="icon" onClick={onToggleSidebar} className="md:hidden">

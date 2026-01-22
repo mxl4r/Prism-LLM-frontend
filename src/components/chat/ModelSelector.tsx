@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { ModelType, ModelProvider, AIModelConfig } from '../../types';
-import { ChevronDown, Sparkles, Zap, Brain, Hexagon } from 'lucide-react';
+import { ChevronDown, Zap, Brain, Hexagon } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 
