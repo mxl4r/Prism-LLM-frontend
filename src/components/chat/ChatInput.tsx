@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { SendHorizontal, Mic, X, Image as ImageIcon } from 'lucide-react';
+import { Send, Mic, X, Image as ImageIcon } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { fileToBase64 } from '../../lib/utils';
 import { Attachment } from '../../types';
@@ -174,7 +174,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
               }
             `}
           >
-            <SendHorizontal size={20} className={(input.trim() || attachments.length > 0) ? "ml-0.5" : ""} />
+            <Send size={20} className={(input.trim() || attachments.length > 0) ? "ml-0.5" : ""} />
           </Button>
         </div>
       </form>
