@@ -39,7 +39,8 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="flex h-screen w-full relative overflow-hidden bg-[#F8FAFC]">
+    // Changed h-screen to h-[100dvh] for mobile browser address bar handling
+    <div className="flex h-[100dvh] w-full relative overflow-hidden bg-[#F8FAFC]">
       <Sidebar 
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)} 
@@ -49,7 +50,7 @@ export default function DashboardLayout({
         onSelectSession={(id) => setCurrentSessionId(id)}
       />
 
-      <div className="flex-1 flex flex-col h-full relative z-10 transition-all duration-300">
+      <div className="flex-1 flex flex-col h-full relative z-10 transition-all duration-300 min-w-0">
         <Navbar 
           onToggleSidebar={handleToggleSidebar} 
           currentModel={currentModel}
@@ -57,7 +58,8 @@ export default function DashboardLayout({
           onNewChat={handleNewChat}
         />
         
-        <main className="flex-1 flex flex-col relative overflow-hidden">
+        {/* Added min-h-0 to ensure children can scroll properly */}
+        <main className="flex-1 flex flex-col relative overflow-hidden min-h-0">
           {children}
         </main>
       </div>

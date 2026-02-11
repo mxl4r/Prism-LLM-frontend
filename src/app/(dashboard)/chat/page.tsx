@@ -86,10 +86,11 @@ export default function ChatPage() {
     }
   }, []);
 
+  // Explicitly wrap in a flex column container that takes full height
   return (
-    <>
+    <div className="flex flex-col h-full min-h-0 w-full">
       <ChatWindow messages={messages} isLoading={isLoading} />
       <ChatInput onSend={handleSendMessage} isLoading={isLoading} />
-    </>
+    </div>
   );
 }

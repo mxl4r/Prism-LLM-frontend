@@ -8,10 +8,20 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background-color: #F8FAFC;
   color: #1e293b;
-  overflow: hidden; /* App handles scrolling mostly */
+  /* Use 100dvh for better mobile support */
+  height: 100dvh; 
+  width: 100vw;
+  overflow: hidden; /* Prevent body scroll, let app handle it */
+  overscroll-behavior: none; /* Prevent pull-to-refresh on mobile */
 }
 
 /* Custom Scrollbar for Webkit */

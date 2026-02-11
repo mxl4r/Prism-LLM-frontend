@@ -34,8 +34,9 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading }) =
     );
   }
 
+  // Added min-h-0 to fix flex scrolling issue
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-8 space-y-2 scrollbar-hide">
+    <div className="flex-1 min-h-0 overflow-y-auto px-4 py-8 space-y-2 scrollbar-hide">
       <div className="max-w-4xl mx-auto w-full">
         {messages.map((msg) => (
           <MessageBubble key={msg.id} message={msg} />
