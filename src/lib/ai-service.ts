@@ -2,24 +2,37 @@ import { GoogleGenAI } from "@google/genai";
 import { ModelType, Attachment } from "../types";
 
 // --- API Keys ---
+// Default to empty strings to prevent build-time crashes if keys are missing.
+// This allows the frontend to deploy successfully even if the backend connection isn't ready yet.
 const KEYS = {
-  GOOGLE: process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GEMINI_API_KEY,
-  OPENAI: process.env.NEXT_PUBLIC_OPENAI_API_KEY || process.env.OPENAI_API_KEY,
-  ANTHROPIC: process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY,
+  GOOGLE: process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
+  OPENAI: process.env.NEXT_PUBLIC_OPENAI_API_KEY || process.env.OPENAI_API_KEY || '',
+  ANTHROPIC: process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY || '',
 };
 
 // --- Providers Logic ---
 
 // 1. Google Gemini Provider
 class GeminiProvider {
-  private ai: GoogleGenAI;
+  private ai: GoogleGenAI | null = null;
   
   constructor() {
-    this.ai = new GoogleGenAI({ apiKey: KEYS.GOOGLE || '' });
+    // Only initialize if key exists, otherwise handle gracefully
+    if (KEYS.GOOGLE) {
+      try {
+        this.ai = new GoogleGenAI({ apiKey: KEYS.GOOGLE });
+      } catch (e) {
+        console.warn("Failed to initialize Google GenAI client", e);
+      }
+    }
   }
 
   async *stream(model: string, prompt: string, attachments: Attachment[]) {
-    if (!KEYS.GOOGLE) throw new Error("Google API Key missing");
+    if (!this.ai) {
+      // If we are here, it means no key was provided or init failed.
+      // Since you mentioned a GCP backend, this might be where you eventually fetch from your VM.
+      throw new Error("Google API Key missing or client initialization failed. Please check your environment variables.");
+    }
     
     // Construct contents
     let parts: any[] = [];
@@ -48,7 +61,7 @@ class GeminiProvider {
   }
 }
 
-// 2. OpenAI Provider (Using Fetch for client-side demo - standard SDK usually node-only for some features)
+// 2. OpenAI Provider (Using Fetch for client-side demo)
 class OpenAIProvider {
   async *stream(model: string, prompt: string, attachments: Attachment[]) {
     if (!KEYS.OPENAI) throw new Error("OpenAI API Key missing");
@@ -112,9 +125,6 @@ class OpenAIProvider {
 }
 
 // 3. Anthropic Claude Provider
-// Note: Client-side calls to Anthropic usually blocked by CORS. 
-// This assumes you have a proxy or are testing in an environment that allows it, 
-// OR utilizing a Next.js API Route (recommended). For this file structure, we simulate client fetch.
 class AnthropicProvider {
   async *stream(model: string, prompt: string, attachments: Attachment[]) {
     if (!KEYS.ANTHROPIC) throw new Error("Anthropic API Key missing");
@@ -136,7 +146,7 @@ class AnthropicProvider {
         "x-api-key": KEYS.ANTHROPIC || "",
         "anthropic-version": "2023-06-01",
         "content-type": "application/json",
-        "dangerously-allow-browser": "true" // Client-side flag (not recommended for prod)
+        "dangerously-allow-browser": "true" 
       },
       body: JSON.stringify({
         model: model,
@@ -147,7 +157,6 @@ class AnthropicProvider {
     });
 
     if (!response.ok) {
-       // Fallback for CORS error common in demos
        throw new Error(`Anthropic Error: ${response.status} (Possible CORS issue on client-side)`);
     }
 
