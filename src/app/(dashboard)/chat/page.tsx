@@ -9,6 +9,7 @@ import { generateId } from '../../../lib/utils';
 
 // Force dynamic rendering to avoid static export issues during Vercel build
 export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
