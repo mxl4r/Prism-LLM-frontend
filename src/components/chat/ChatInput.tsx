@@ -77,7 +77,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, isLoading }) => {
   }, [input]);
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 pb-6">
+    // Added flex-shrink-0 and reduced bottom padding slightly for better fit
+    <div className="w-full max-w-4xl mx-auto px-4 pb-4 md:pb-6 flex-shrink-0">
       
       {/* Attachments Preview */}
       {attachments.length > 0 && (

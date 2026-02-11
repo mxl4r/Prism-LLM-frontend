@@ -19,7 +19,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading }) =
 
   if (messages.length === 0) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center text-center p-8 opacity-0 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+      <div className="h-full w-full flex flex-col items-center justify-center text-center p-8 opacity-0 animate-fade-in overflow-y-auto" style={{ animationDelay: '0.1s' }}>
         <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-prism-accent to-blue-600 flex items-center justify-center mb-6 shadow-2xl shadow-blue-900/20 text-white relative overflow-hidden group">
           <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
           <Sparkles size={40} className="relative z-10" />
@@ -34,10 +34,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ messages, isLoading }) =
     );
   }
 
-  // Added min-h-0 to fix flex scrolling issue
+  // Changed to w-full h-full to fit the absolute parent
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto px-4 py-8 space-y-2 scrollbar-hide">
-      <div className="max-w-4xl mx-auto w-full">
+    <div className="w-full h-full overflow-y-auto px-4 py-8 space-y-2 scrollbar-hide overscroll-y-contain">
+      <div className="max-w-4xl mx-auto w-full pb-4">
         {messages.map((msg) => (
           <MessageBubble key={msg.id} message={msg} />
         ))}

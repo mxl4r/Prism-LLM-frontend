@@ -86,11 +86,25 @@ export default function ChatPage() {
     }
   }, []);
 
-  // Explicitly wrap in a flex column container that takes full height
+  // ROBUST LAYOUT STRATEGY:
+  // 1. Outer container is flex-col, full height, no overflow.
+  // 2. Middle container is flex-1 and RELATIVE.
+  // 3. Inner container is ABSOLUTE INSET-0.
+  // This forces the chat window to stay strictly within the available bounds and scroll internally.
   return (
-    <div className="flex flex-col h-full min-h-0 w-full">
-      <ChatWindow messages={messages} isLoading={isLoading} />
-      <ChatInput onSend={handleSendMessage} isLoading={isLoading} />
+    <div className="flex flex-col h-full w-full overflow-hidden bg-[#F8FAFC]">
+      
+      {/* Messages Area - Absolute Positioning Trick */}
+      <div className="flex-1 relative min-h-0">
+        <div className="absolute inset-0">
+          <ChatWindow messages={messages} isLoading={isLoading} />
+        </div>
+      </div>
+
+      {/* Input Area - Fixed at bottom */}
+      <div className="flex-shrink-0 w-full z-10 bg-[#F8FAFC]/80 backdrop-blur-sm">
+        <ChatInput onSend={handleSendMessage} isLoading={isLoading} />
+      </div>
     </div>
   );
 }
