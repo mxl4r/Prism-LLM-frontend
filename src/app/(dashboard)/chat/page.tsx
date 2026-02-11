@@ -1,21 +1,28 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ChatWindow } from '../../../components/chat/ChatWindow';
 import { ChatInput } from '../../../components/chat/ChatInput';
 import { Message, Attachment, ModelType } from '../../../types';
 import { AIService } from '../../../lib/ai-service';
 import { generateId } from '../../../lib/utils';
 
+// Force dynamic rendering to avoid static export issues during Vercel build
+export const dynamic = 'force-dynamic';
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const aiServiceRef = useRef(new AIService());
+  // Initialize as null to prevent instantiation during server-side pre-rendering
+  const aiServiceRef = useRef<AIService | null>(null);
+
+  // Instantiate service only on the client side after mount
+  useEffect(() => {
+    aiServiceRef.current = new AIService();
+  }, []);
 
   const getSelectedModel = (): ModelType => {
     if (typeof window !== 'undefined') {
-       // Cast to unknown first if strict checks fail, but ModelType includes this string now.
-       // We use 'as ModelType' to tell TS we trust the storage/default.
        const stored = localStorage.getItem('prism_model');
        if (stored) return stored as ModelType;
     }
@@ -23,6 +30,11 @@ export default function ChatPage() {
   };
 
   const handleSendMessage = useCallback(async (content: string, attachments: Attachment[]) => {
+    // Safety check / lazy init
+    if (!aiServiceRef.current) {
+        aiServiceRef.current = new AIService();
+    }
+
     const model = getSelectedModel();
     
     // Add User Message
