@@ -55,8 +55,8 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({ currentModel, onSe
     }
   };
 
-  // Group models by provider
-  const providers = [...new Set(MODELS.map(m => m.provider))] as ModelProvider[];
+  // Group models by provider (Array.from avoids --downlevelIteration requirement)
+  const providers = Array.from(new Set(MODELS.map(m => m.provider))) as ModelProvider[];
 
   return (
     <div className="relative z-30" ref={containerRef}>
