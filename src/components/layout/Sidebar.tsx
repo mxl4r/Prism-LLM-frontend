@@ -3,7 +3,6 @@ import React from 'react';
 import { Plus, MessageSquare, Settings, LogOut, X } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { ChatSession } from '../../types';
-import { supabase } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
 interface SidebarProps {
@@ -15,35 +14,35 @@ interface SidebarProps {
   onSelectSession: (id: string) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ 
-  isOpen, 
-  onClose, 
-  sessions, 
+export const Sidebar: React.FC<SidebarProps> = ({
+  isOpen,
+  onClose,
+  sessions,
   currentSessionId,
   onNewChat,
   onSelectSession
 }) => {
   const router = useRouter();
-  
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/login');
+
+  /** Navigate back to landing page (auth/logout handled by backend) */
+  const handleExit = () => {
+    router.push('/');
   };
 
   return (
     <>
       {/* Mobile Overlay */}
       {isOpen && (
-        <div 
-          className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 md:hidden" 
+        <div
+          className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 md:hidden"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar Container */}
-      <aside 
+      <aside
         className={`
-          fixed md:relative z-50 h-full w-[280px] 
+          fixed md:relative z-50 h-full w-[280px]
           bg-white/80 backdrop-blur-2xl border-r border-white/50
           transition-transform duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]
           ${isOpen ? 'translate-x-0' : '-translate-x-full md:hidden'}
@@ -68,8 +67,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* New Chat Button */}
         <div className="px-4 mb-6">
-          <Button 
-            variant="secondary" 
+          <Button
+            variant="secondary"
             className="w-full justify-start gap-3 shadow-none border-dashed border-slate-300 bg-transparent hover:bg-white/60 hover:border-solid hover:border-slate-200"
             onClick={onNewChat}
           >
@@ -96,8 +95,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => onSelectSession(session.id)}
               className={`
                 w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm transition-all
-                ${currentSessionId === session.id 
-                  ? 'bg-white shadow-sm border border-slate-100 text-prism-accent font-medium' 
+                ${currentSessionId === session.id
+                  ? 'bg-white shadow-sm border border-slate-100 text-prism-accent font-medium'
                   : 'text-slate-600 hover:bg-white/50 hover:text-slate-900'
                 }
               `}
@@ -114,13 +113,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <Settings size={16} />
             Settings
           </Button>
-           <Button 
-             variant="ghost" 
-             className="w-full justify-start gap-3 text-sm font-normal text-red-400 hover:text-red-500 hover:bg-red-50"
-             onClick={handleLogout}
-           >
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-3 text-sm font-normal text-red-400 hover:text-red-500 hover:bg-red-50"
+            onClick={handleExit}
+          >
             <LogOut size={16} />
-            Log out
+            Exit
           </Button>
         </div>
       </aside>

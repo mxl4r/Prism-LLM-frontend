@@ -1,90 +1,107 @@
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ChatWindow } from '../../../components/chat/ChatWindow';
 import { ChatInput } from '../../../components/chat/ChatInput';
-import { Message, Attachment, ModelType } from '../../../types';
-import { AIService } from '../../../lib/ai-service';
+import { Message, Attachment, ModelType, ChatApiMessage } from '../../../types';
+import { streamChat } from '../../../lib/api';
 import { generateId } from '../../../lib/utils';
 
 // Force dynamic rendering to avoid static export issues during Vercel build
 export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 
+/** Convert local Message history to the API message format */
+function toApiMessages(messages: Message[]): ChatApiMessage[] {
+  return messages
+    .filter((m) => !m.isError)
+    .map((m) => ({
+      role: m.role === 'user' ? 'user' : 'assistant',
+      content: m.content,
+    }));
+}
+
+/** Read the selected model from localStorage (set by Navbar/ModelSelector) */
+function getSelectedModel(): ModelType {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('prism_model');
+    if (stored) return stored as ModelType;
+  }
+  return 'gemini-2.5-flash-latest';
+}
+
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  // Initialize as null to prevent instantiation during server-side pre-rendering
-  const aiServiceRef = useRef<AIService | null>(null);
-
-  // Instantiate service only on the client side after mount
-  useEffect(() => {
-    aiServiceRef.current = new AIService();
-  }, []);
-
-  const getSelectedModel = (): ModelType => {
-    if (typeof window !== 'undefined') {
-       const stored = localStorage.getItem('prism_model');
-       if (stored) return stored as ModelType;
-    }
-    return 'gemini-2.5-flash-latest';
-  };
+  const abortControllerRef = React.useRef<AbortController | null>(null);
 
   const handleSendMessage = useCallback(async (content: string, attachments: Attachment[]) => {
-    // Safety check / lazy init
-    if (!aiServiceRef.current) {
-        aiServiceRef.current = new AIService();
-    }
+    if (isLoading) return;
+
+    // Cancel any in-flight request
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
 
     const model = getSelectedModel();
-    
-    // Add User Message
+
     const userMsg: Message = {
       id: generateId(),
       role: 'user',
       content,
-      attachments, // Store attachments
+      attachments,
       timestamp: new Date(),
     };
-    
-    setMessages(prev => [...prev, userMsg]);
+
+    setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
 
-    try {
-      const aiMsgId = generateId();
-      setMessages(prev => [...prev, {
+    // Placeholder AI message that will be filled incrementally
+    const aiMsgId = generateId();
+    setMessages((prev) => [
+      ...prev,
+      {
         id: aiMsgId,
         role: 'model',
         content: '',
         timestamp: new Date(),
-      }]);
+      },
+    ]);
 
-      const stream = aiServiceRef.current.streamMessage(model, content, attachments);
-      
-      let fullContent = '';
-      
-      for await (const chunk of stream) {
-        fullContent += chunk;
-        setMessages(prev => prev.map(msg => 
-          msg.id === aiMsgId 
-            ? { ...msg, content: fullContent } 
-            : msg
-        ));
-      }
+    try {
+      // Build history including the new user message
+      const historyForApi = toApiMessages([...messages, userMsg]);
 
+      await streamChat(
+        { model, messages: historyForApi },
+        (chunk) => {
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === aiMsgId ? { ...msg, content: msg.content + chunk } : msg,
+            ),
+          );
+        },
+        abortControllerRef.current.signal,
+      );
     } catch (error: any) {
-      console.error(error);
-      setMessages(prev => [...prev, {
-        id: generateId(),
-        role: 'model',
-        content: `Error (${model}): ${error.message || "Connection failed."}`,
-        timestamp: new Date(),
-        isError: true
-      }]);
+      const isAborted = error?.name === 'AbortError' || error?.message?.includes('aborted');
+
+      if (!isAborted) {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === aiMsgId
+              ? {
+                  ...msg,
+                  content: error?.message || 'An unexpected error occurred. Please try again.',
+                  isError: true,
+                }
+              : msg,
+          ),
+        );
+      }
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [messages, isLoading]);
 
   // ROBUST LAYOUT STRATEGY:
   // 1. Outer container is flex-col, full height, no overflow.
@@ -93,7 +110,7 @@ export default function ChatPage() {
   // This forces the chat window to stay strictly within the available bounds and scroll internally.
   return (
     <div className="flex flex-col h-full w-full overflow-hidden bg-[#F8FAFC]">
-      
+
       {/* Messages Area - Absolute Positioning Trick */}
       <div className="flex-1 relative min-h-0">
         <div className="absolute inset-0">

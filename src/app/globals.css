@@ -17,10 +17,12 @@ html, body {
 body {
   background-color: #F8FAFC;
   color: #1e293b;
-  /* Use 100dvh for better mobile support */
-  height: 100dvh; 
-  width: 100vw;
-  overflow: hidden; /* Prevent body scroll, let app handle it */
+  /* 
+    NOTE: overflow is intentionally NOT set to hidden here.
+    The chat dashboard layout uses its own h-[100dvh] overflow-hidden container
+    to lock the viewport. Setting overflow:hidden on body was blocking scroll
+    on the landing page and login page.
+  */
   overscroll-behavior: none; /* Prevent pull-to-refresh on mobile */
 }
 
