@@ -73,7 +73,7 @@ export default function LandingPage() {
       <section className="relative pt-16 md:pt-20 pb-20 md:pb-32 px-4 md:px-6 flex flex-col items-center text-center max-w-5xl mx-auto z-10 w-full">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/50 border border-white/60 text-prism-accent text-xs font-semibold mb-6 md:mb-8 animate-fade-in shadow-sm backdrop-blur-md">
           <Sparkles size={12} className="text-blue-500" />
-          <span>Powered by Gemini 3.0</span>
+          <span>Multi-Model AI Platform</span>
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-slate-800 tracking-tight mb-6 md:mb-8 leading-[1.1] animate-fade-in" style={{ animationDelay: '0.1s' }}>
@@ -98,7 +98,7 @@ export default function LandingPage() {
               onKeyDown={(e) => e.key === 'Enter' && handleTryIt(e)}
             />
             <Button onClick={handleTryIt} className="!rounded-2xl px-8 h-12 text-base w-full sm:w-auto">
-              Start Chatting
+              Get Started
             </Button>
           </Card>
 
@@ -260,7 +260,7 @@ export default function LandingPage() {
         <div className="space-y-4">
           {[
             { q: "Is Prism really free?", a: "Yes! Our starter plan is completely free to use with generous daily limits, perfect for trying out the capabilities of our AI." },
-            { q: "Which AI models do you use?", a: "We utilize Google's latest Gemini 3 Flash for speed and Gemini 3 Pro for complex reasoning tasks, ensuring you always get the best results." },
+            { q: "Which AI models do you use?", a: "We offer Gemini 2.5 Pro & Flash for speed and reasoning, Claude Sonnet 4.6 for coding & analysis, and Qwen 2.5 for lightweight tasks — so you always get the best results." },
             { q: "Can I use Prism for commercial work?", a: "Absolutely. Content generated on the Pro plan is yours to use commercially without any attribution required." },
             { q: "Is my data secure?", a: "Privacy is our core value. We do not store your conversations for training purposes. Your data remains yours." }
           ].map((faq, i) => (

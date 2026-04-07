@@ -2,9 +2,11 @@ export type Role = 'user' | 'model';
 
 export interface Attachment {
   id: string;
-  type: 'image';
-  url: string; // Preview URL (blob)
-  base64?: string; // For sending to backend
+  type: 'image' | 'file';
+  name?: string; // Original filename
+  size?: number; // File size in bytes
+  url: string; // Preview URL (blob for images, empty for files)
+  base64?: string; // Base64-encoded content for sending to backend
   mimeType?: string;
 }
 
@@ -24,16 +26,16 @@ export interface ChatSession {
 }
 
 // Supported Models — labels sent to the backend gateway
-export type ModelProvider = 'google' | 'openai' | 'anthropic' | 'alibaba';
+export type ModelProvider = 'google' | 'anthropic' | 'alibaba';
 
 export type ModelType =
   // Google
-  | 'gemini-2.5-flash-latest'
-  | 'gemini-3-pro-preview'
+  | 'gemini-2.5-pro'
+  | 'gemini-2.5-flash'
   // Alibaba / Qwen
   | 'qwen2.5:3b'
   // Anthropic
-  | 'claude-3-5-sonnet-latest'
+  | 'claude-sonnet-4-6'
   | 'claude-3-opus-latest';
 
 export interface AIModelConfig {

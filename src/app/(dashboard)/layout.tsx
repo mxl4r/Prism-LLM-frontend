@@ -12,7 +12,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [currentModel, setCurrentModel] = useState<ModelType>('gemini-2.5-flash-latest');
+  const [currentModel, setCurrentModel] = useState<ModelType>('gemini-2.5-pro');
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string>(generateId());
 

@@ -1,10 +1,17 @@
 'use client';
 import React from 'react';
 import { Message } from '../../types';
-import { Bot, User, AlertCircle } from 'lucide-react';
+import { Bot, User, AlertCircle, FileText, Download } from 'lucide-react';
 
 interface MessageBubbleProps {
   message: Message;
+}
+
+/** Human-readable file size */
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
@@ -33,13 +40,43 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
         {/* Content Container */}
         <div className="flex flex-col gap-2 w-full">
           
-          {/* Attachments (Images) */}
+          {/* Attachments */}
           {hasAttachments && (
              <div className={`flex flex-wrap gap-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
                 {message.attachments!.map(att => (
-                   <div key={att.id} className="relative rounded-2xl overflow-hidden border border-white/50 shadow-sm max-w-[200px]">
-                      <img src={att.url} alt="attachment" className="w-full h-auto" />
-                   </div>
+                  att.type === 'image' ? (
+                    /* Image attachment */
+                    <div key={att.id} className="relative rounded-2xl overflow-hidden border border-white/50 shadow-sm max-w-[200px]">
+                       <img src={att.url} alt={att.name || 'attachment'} className="w-full h-auto" />
+                    </div>
+                  ) : (
+                    /* File attachment */
+                    <div
+                      key={att.id}
+                      className={`
+                        flex items-center gap-2.5 px-3 py-2.5 rounded-xl shadow-sm max-w-[240px]
+                        ${isUser
+                          ? 'bg-white/20 border border-white/30'
+                          : 'bg-white/60 border border-slate-200/50'
+                        }
+                      `}
+                    >
+                      <div className={`
+                        w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0
+                        ${isUser ? 'bg-white/20' : 'bg-slate-100'}
+                      `}>
+                        <FileText size={16} className={isUser ? 'text-white/80' : 'text-slate-500'} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className={`text-xs font-medium truncate ${isUser ? 'text-white/90' : 'text-slate-700'}`}>
+                          {att.name}
+                        </div>
+                        <div className={`text-[10px] ${isUser ? 'text-white/50' : 'text-slate-400'}`}>
+                          {formatFileSize(att.size ?? 0)}
+                        </div>
+                      </div>
+                    </div>
+                  )
                 ))}
              </div>
           )}

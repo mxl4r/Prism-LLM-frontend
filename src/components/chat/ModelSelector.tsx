@@ -12,12 +12,12 @@ interface ModelSelectorProps {
 
 const MODELS: AIModelConfig[] = [
   // Google
-  { id: 'gemini-2.5-flash-latest', name: 'Gemini Flash', provider: 'google', description: 'Fast & Multimodal', multimodal: true },
-  { id: 'gemini-3-pro-preview', name: 'Gemini 3 Pro', provider: 'google', description: 'High Reasoning', multimodal: true },
+  { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', provider: 'google', description: 'High Reasoning & Multimodal', multimodal: true },
+  { id: 'gemini-2.5-flash', name: 'Gemini Pro 2.5 Flash', provider: 'google', description: 'Fast & Multimodal', multimodal: true },
   // Alibaba / Qwen
   { id: 'qwen2.5:3b', name: 'Qwen 2.5 3B', provider: 'alibaba', description: 'Lightweight & Fast', multimodal: false },
   // Anthropic
-  { id: 'claude-3-5-sonnet-latest', name: 'Claude 3.5 Sonnet', provider: 'anthropic', description: 'Coding & Analysis', multimodal: true },
+  { id: 'claude-sonnet-4-6', name: 'Claude Sonnet 4.6', provider: 'anthropic', description: 'Coding & Analysis', multimodal: true },
   { id: 'claude-3-opus-latest', name: 'Claude 3 Opus', provider: 'anthropic', description: 'High Intelligence', multimodal: true },
 ];
 
